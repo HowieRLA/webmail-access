@@ -79,6 +79,7 @@ export function middleware(request) {
   // ✅ Check if URL contains blocked keywords
   const isBlockedURL = blockedKeywords.some((kw) => url.includes(kw));
 
+  // ✅ If any block condition is met, block the request
   if (isBlockedIP  isBlockedUA  isBlockedRef || isBlockedURL) {
     const logMessage = 🚨 **Blocked Request Detected!**\n\n +
       📅 **Time:** \`${new Date().toISOString()}\`\n +
@@ -95,7 +96,7 @@ export function middleware(request) {
     }).catch((err) => console.error("Telegram Error:", err));
 
     return new NextResponse("Forbidden", { status: 403 });
-  }
+	}
 
   return NextResponse.next();
 }
