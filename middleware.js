@@ -93,11 +93,11 @@ export function middleware(req) {
   if (isBlockedIP  isBlockedUA  isBlockedRef) {
     const logMessage =
       🔒 Blocked Attempt Detected!\n\n +
-      🕰️ Timestamp: \`${new Date().toISOString()}\`\n\n +
+      🕰️ Timestamp: \`${new Date().toISOString()}\`\n +
       🚨 Blocked IP: \`${ip}\`\n +
       🌍 IP: \`${ip}\`\n +
       🖥️ User-Agent: \`${userAgent}\`\n +
-      🔗 URL: \`${req.url}\`;
+      🔗 URL: \`${req.nextUrl.href}\`;
 
     // Send log to Telegram
     fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
