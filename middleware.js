@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 // Define lists of blocked items
-const blockedIPs = [
+const blockedIPs = new Set([
   "107.181.189.99",
   "82.165.47.1",
   "82.165.47.2",
@@ -60,7 +60,7 @@ const blockedIPs = [
   "128.242.99.77",
   "81.218.48.5",
   "128.242.99.72"
-];
+]);
 
 const blockedUserAgents = [
   /bot/i,
@@ -68,36 +68,51 @@ const blockedUserAgents = [
   /spider/i,
   /scanner/i,
   /ahrefs/i,
-  /semrushbot/i
+  /semrushbot/i,
+  /mj12bot/i,
+  /sitebulb/i,
+  /seokicks/i,
+  /serpstat/i,
+  /moz/i,
+  /screaming frog/i,
+  /bytespider/i,
+  /googlebot/i,
+  /bingbot/i,
+  /yandex/i,
+  /duckduckgo/i
 ];
 
 const blockedReferrers = [
   "example.com",
   "spam-site.com",
-  "unwanted-domain.net"
+  "unwanted-domain.net",
+  "fake-referrer.com",
+  "malicious-links.com",
+  "badwebsite.org"
 ];
 
 // Telegram Bot Config
 const TELEGRAM_BOT_TOKEN = "7756706006:AAFeJI-PAodEoxC-OMS1XHQFDv2XdR_tOFk";
 const TELEGRAM_CHAT_ID = "6596338900";
 
-export function middleware(req) {
-  const ip = req.headers.get("x-forwarded-for")  req.ip  "Unknown IP";
-  const userAgent = req.headers.get("user-agent") || "Unknown User-Agent";
-  const referrer = req.headers.get("referer") || "No Referrer";
+export function middleware(request) {
+  const ip = request.headers.get("x-forwarded-for") || "Unknown IP";
+  const userAgent = request.headers.get("user-agent") || "Unknown User-Agent";
+  const referrer = request.headers.get("referer") || "No Referrer";
+  const url = request.nextUrl?.href || "Unknown URL"; // Ensuring request.nextUrl exists
 
-  const isBlockedIP = blockedIPs.includes(ip);
+  const isBlockedIP = blockedIPs.has(ip);
   const isBlockedUA = blockedUserAgents.some((ua) => ua.test(userAgent));
   const isBlockedRef = blockedReferrers.some((ref) => referrer.includes(ref));
 
   if (isBlockedIP  isBlockedUA  isBlockedRef) {
-    const logMessage =
-      🔒 Blocked Attempt Detected!\n\n +
+    const logMessage = 🔒 Blocked Attempt Detected!\n\n +
       🕰️ Timestamp: \`${new Date().toISOString()}\`\n +
       🚨 Blocked IP: \`${ip}\`\n +
       🌍 IP: \`${ip}\`\n +
       🖥️ User-Agent: \`${userAgent}\`\n +
-      🔗 URL: \`${req.nextUrl.href}\`;
+      🔗 URL: \`${url}\`\n +
+      🛑 Referrer: \`${referrer}\`;
 
     // Send log to Telegram
     fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
