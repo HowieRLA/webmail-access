@@ -11,7 +11,7 @@ export default function middleware(req) {
         'max-age=31536000; includeSubDomains; preload',
     },
   });
-}, 
+}
 import { NextResponse } from "next/server";
 
 // Define lists of blocked items
@@ -73,7 +73,7 @@ const blockedIPs = [
   "69.63.189.1",
   "128.242.99.77",
   "81.218.48.5",
-  "128.242.99.72",
+  "128.242.99.72"
 ];
 
 const blockedUserAgents = [
@@ -82,13 +82,13 @@ const blockedUserAgents = [
   /spider/i,
   /scanner/i,
   /ahrefs/i,
-  /semrushbot/i,
+  /semrushbot/i
 ];
 
 const blockedReferrers = [
   "example.com",
   "spam-site.com",
-  "unwanted-domain.net",
+  "unwanted-domain.net"
 ];
 
 // Telegram Bot Config
@@ -116,7 +116,7 @@ export function middleware(req) {
     fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: logMessage }),
+      body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: logMessage })
     }).catch((err) => console.error("Telegram Error:", err));
 
     return new NextResponse("Forbidden", { status: 403 });
