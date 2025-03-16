@@ -1,17 +1,3 @@
-import { next } from '@vercel/edge';
-
-export default function middleware(req) {
-  return next({
-    headers: {
-      'Referrer-Policy': 'origin-when-cross-origin',
-      'X-Frame-Options': 'DENY',
-      'X-Content-Type-Options': 'nosniff',
-      'X-DNS-Prefetch-Control': 'on',
-      'Strict-Transport-Security':
-        'max-age=31536000; includeSubDomains; preload',
-    },
-  });
-}
 import { NextResponse } from "next/server";
 
 // Define lists of blocked items
@@ -96,18 +82,19 @@ const TELEGRAM_BOT_TOKEN = "7756706006:AAFeJI-PAodEoxC-OMS1XHQFDv2XdR_tOFk";
 const TELEGRAM_CHAT_ID = "6596338900";
 
 export function middleware(req) {
-  const ip = req.headers.get("x-forwarded-for") || req.ip;
-  const userAgent = req.headers.get("user-agent") || "";
-  const referrer = req.headers.get("referer") || "";
+  const ip = req.headers.get("x-forwarded-for")  req.ip  "Unknown IP";
+  const userAgent = req.headers.get("user-agent") || "Unknown User-Agent";
+  const referrer = req.headers.get("referer") || "No Referrer";
 
   const isBlockedIP = blockedIPs.includes(ip);
   const isBlockedUA = blockedUserAgents.some((ua) => ua.test(userAgent));
   const isBlockedRef = blockedReferrers.some((ref) => referrer.includes(ref));
 
   if (isBlockedIP  isBlockedUA  isBlockedRef) {
-    const logMessage = 🔒 Blocked Attempt Detected!\n\n +
+    const logMessage =
+      🔒 Blocked Attempt Detected!\n\n +
       🕰️ Timestamp: \`${new Date().toISOString()}\`\n\n +
-      🚨 Blocked IP: \`${ip}\`\n\n +
+      🚨 Blocked IP: \`${ip}\`\n +
       🌍 IP: \`${ip}\`\n +
       🖥️ User-Agent: \`${userAgent}\`\n +
       🔗 URL: \`${req.url}\`;
